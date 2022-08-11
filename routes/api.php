@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\MapelController as mapel;
+use App\Http\Controllers\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +22,5 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::post('logout', [AuthController::class, 'logout']);
     // manggil controller dengan mengubah namespace di RouteServiceProvider.php biar bisa kayak versi2 sebelumnya
     Route::post('logoutall', [AuthController::class, 'logoutall']);
-    Route::get('mapel/{nis}', [mapel::class, 'index']);
+    Route::post('jadwal', [JadwalController::class, 'index']);
 });
