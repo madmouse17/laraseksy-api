@@ -17,6 +17,7 @@ use App\Http\Controllers\JadwalController;
 */
 
 Route::post('login', ['as'=>'login',AuthController::class, 'login']);
+Route::get('midtrans', [JadwalController::class, 'getSnapToken']);
 Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     // manggil controller sesuai bawaan laravel 8
     Route::post('logout', [AuthController::class, 'logout']);
