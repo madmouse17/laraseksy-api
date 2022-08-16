@@ -38,7 +38,7 @@ class AuthController extends Controller
                 $respon = [
                     'status' => 'error',
                     'msg' => 'Unathorized',
-                    'errors' => null,
+                    'errors' => "NIS atau Password Yang Anda Masukkan Salah",
                     'content' => null,
                 ];
                 return response()->json($respon, 401);
