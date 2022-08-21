@@ -22,10 +22,11 @@ class JadwalController extends Controller
 {
     public function index(Request $request)
     {
+        // dd($request);
 
         $date = Carbon::parse($request->tgl)->locale('id_ID');
         $diff = $date->dayName;
-        // dd($diff);
+        //  dd($diff);
         $siswa = Siswa::where('nis', $request->nis)->first();
         $taja = Distance::first();
         $jadwal = Jadwal::where('kelas_id', $siswa->kelas_id)
@@ -34,6 +35,7 @@ class JadwalController extends Controller
             ->select('jadwal', 'hari')
             ->first();
         // dd($jadwal);
+
         if ($jadwal == null) {
             $respon = [
                 'status' => 'success',
