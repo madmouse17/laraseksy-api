@@ -25,3 +25,6 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::post('logoutall', [AuthController::class, 'logoutall']);
     Route::post('jadwal', [JadwalController::class, 'index']);
 });
+Route::get('/trial', function () {
+    return view('welcome');
+});
