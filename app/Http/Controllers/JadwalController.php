@@ -62,6 +62,10 @@ class JadwalController extends Controller
 
         }
     }
+    // public function Absen(Type $var = null)
+    // {
+    //     # code...
+    // }
 
 
 }

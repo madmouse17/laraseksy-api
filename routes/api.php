@@ -20,8 +20,13 @@ Route::post('login', ['as'=>'login',AuthController::class, 'login']);
 
 Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('downloadimage', [AuthController::class, 'downloadImage']);
+    Route::post('uploadimage', [AuthController::class, 'uploadImage']);
     Route::post('logoutall', [AuthController::class, 'logoutall']);
     Route::post('jadwal', [JadwalController::class, 'index']);
+    Route::post('absen', [JadwalController::class, 'absen']);
+
+
 });
 
 

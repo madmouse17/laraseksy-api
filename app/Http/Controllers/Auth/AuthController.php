@@ -73,6 +73,40 @@ class AuthController extends Controller
             return response()->json($respon, 200);
         }
     }
+    public function uploadImage(Request $request)
+    {
+        // dd($request);
+        $path = storage_path('app/public/'.$request->dirpath);
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+         if ($request->hasfile('image')) {
+            $file = $request->file('image');
+
+            $fileName = $file->getClientOriginalName();
+
+            $file->move($path, $fileName);
+            $data=[
+                    'type' => 'success',
+                    'msg' => 'Upload Siswa Sukses',
+                    'title'=>'Berhasil',
+            ];
+
+            return response()->json($data,200);
+         }
+    }
+
+    public function downloadImage(Request $request)
+    {
+        $user = $request->user();
+        $file= storage_path(). "/app/public/siswa/".$user->image;
+
+        $headers = array('Content-Type: image/png');
+
+        return response()->download($file, 'filename.pdf',$headers);
+    }
 
     public function logout(Request $request)
     {
