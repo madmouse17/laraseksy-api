@@ -14,8 +14,14 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+
         if (! $request->expectsJson()) {
-            return route('login');
+            $data=[
+                    'type' => 'error',
+                    'msg' => 'Token Tidak Cocok',
+                    'title'=>'Unauthorized',
+            ];
+            return abort(response()->json($data, 401));
         }
     }
 }

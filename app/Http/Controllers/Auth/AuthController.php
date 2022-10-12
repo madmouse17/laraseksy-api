@@ -27,7 +27,6 @@ class AuthController extends Controller
                 'status' => 'error',
                 'msg' => 'Validator error',
                 'errors' => $validate->errors(),
-                'content' => null,
             ];
             return response()->json($respon, 200);
         } else {
@@ -39,7 +38,6 @@ class AuthController extends Controller
                     'status' => 'error',
                     'msg' => 'Unathorized',
                     'errors' => "NIS atau Password Yang Anda Masukkan Salah",
-                    'content' => null,
                 ];
                 return response()->json($respon, 401);
             }
@@ -61,9 +59,9 @@ class AuthController extends Controller
 
             // dd($data);
             $respon = [
-                'status' => 'success',
+                'type' => 'success',
+                'title'=>'Berhasil',
                 'msg' => 'Login successfully',
-                'errors' => null,
                 'content' => [
                     'status_code' => 200,
                     'access_token' => $tokenResult,
@@ -82,10 +80,9 @@ class AuthController extends Controller
 
         $user->currentAccessToken()->delete();
         $respon = [
-            'status' => 'success',
+            'type' => 'success',
             'msg' => 'Logout successfully',
-            'errors' => null,
-            'content' => null,
+            'title'=>'Berhasil'
         ];
         return response()->json($respon, 200);
     }
@@ -95,10 +92,9 @@ class AuthController extends Controller
         $user = $request->user();
         $user->tokens()->delete();
         $respon = [
-            'status' => 'success',
             'msg' => 'Logout successfully',
-            'errors' => null,
-            'content' => null,
+            'type' => 'success',
+            'title'=>'Berhasil'
         ];
         return response()->json($respon, 200);
     }
