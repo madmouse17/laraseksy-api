@@ -2,75 +2,43 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\Admin;
-use App\Models\Distance;
-use App\Models\Siswa;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Arr;
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\Siswa;
+use App\Models\Distance;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\AuthRepo\AuthInterface;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
-    {
-        $validate = Validator::make($request->all(), [
-            'nis' => 'required',
-            'password' => 'required',
-        ]);
+    private AuthInterface $authRepo;
+    public function __construct(AuthInterface $authRepo) {
+$this->authRepo=$authRepo;
+    }
 
-        if ($validate->fails()) {
+    public function login(LoginRequest $request)
+    {
+
+        if (!$request->validated()) {
             $respon = [
-                'status' => 'error',
-                'msg' => 'Validator error',
-                'errors' => $validate->errors(),
+                'type' => 'error',
+                'title'=>'Peringatan!',
+                'msg' => $request->errors(),
             ];
             return response()->json($respon, 200);
         } else {
-
-            $credentials = request(['nis', 'password']);
-            // $credentials = Arr::add($credentials, 'status', 'aktif');
-            if (!Auth::attempt($credentials)) {
-                $respon = [
-                    'status' => 'error',
-                    'msg' => 'Unathorized',
-                    'errors' => "NIS atau Password Yang Anda Masukkan Salah",
-                ];
-                return response()->json($respon, 401);
-            }
-
-            $user = Siswa::where('nis', $request->nis)->first();
-            if (!Hash::check($request->password, $user->password, [])) {
-                throw new \Exception('Error in Login');
-            }
-
-            $tokenResult = $user->createToken('token-auth')->plainTextToken;
-            $data = Siswa::where('nis', $request->nis)
-                ->selectRaw('nis,nama,kelas.kelas kelas')
-                ->leftjoin('kelas', 'kelas.id', 'siswas.kelas_id')
-                ->first();
-            $taja = Distance::selectRaw('tahunajarans.tahun tahunajaran,semesters.semester semester')
-            ->leftjoin('tahunajarans', 'tahunajarans.id', 'distances.tahunajaran_id')
-            ->leftjoin('semesters', 'semesters.id', 'distances.semester_id')
-            ->first();
-
-            // dd($data);
-            $respon = [
-                'type' => 'success',
-                'title'=>'Berhasil',
-                'msg' => 'Login successfully',
-                'content' => [
-                    'status_code' => 200,
-                    'access_token' => $tokenResult,
-                    'token_type' => 'Bearer',
-                    'data'=>$data,
-                    'sekolah'=>$taja
-                ]
-            ];
-            return response()->json($respon, 200);
+           $credentials = $this->authRepo->credentials($request->validated());
+           if($credentials){
+    return $credentials;
+}
+           $data = $this->authRepo->Authorize($request->validated());
+           return $data;
         }
     }
     public function uploadImage(Request $request)
@@ -105,7 +73,7 @@ class AuthController extends Controller
 
         $headers = array('Content-Type: image/png');
 
-        return response()->download($file, 'filename.pdf',$headers);
+        return response()->download($file, 'siswa'.$user->nis.'-'.$user->nama.'_'.uniqid().'.png',$headers);
     }
 
     public function logout(Request $request)
@@ -115,7 +83,7 @@ class AuthController extends Controller
         $user->currentAccessToken()->delete();
         $respon = [
             'type' => 'success',
-            'msg' => 'Logout successfully',
+            'msg' => 'Keluar dari Aplikasi',
             'title'=>'Berhasil'
         ];
         return response()->json($respon, 200);
@@ -126,7 +94,7 @@ class AuthController extends Controller
         $user = $request->user();
         $user->tokens()->delete();
         $respon = [
-            'msg' => 'Logout successfully',
+            'msg' => 'Keluar dari Aplikasi',
             'type' => 'success',
             'title'=>'Berhasil'
         ];
