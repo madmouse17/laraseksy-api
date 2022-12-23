@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Support\Facades\Crypt;
+use App\Http\Resources\DayResource;
+use App\Http\Resources\JadwalDetailResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TahunAjaranResource extends JsonResource
+class JadwalResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +16,10 @@ class TahunAjaranResource extends JsonResource
      */
     public function toArray($request)
     {
+        // dd($this);
         return [
-            'id'=>Crypt::encryptString($this->id),
-            'tahun'=>$this->tahun
+            'day'=>$this->whenLoaded('day', fn () => new DayResource($this->day)),
+            'jadwaldetail'=>JadwalDetailResource::collection($this->whenLoaded('jadwaldetail')),
         ];
-
     }
 }

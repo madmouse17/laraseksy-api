@@ -47,13 +47,13 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
-               return response()->error(['failed'=>['Halaman Tidak Ditemukan']],404);
+               return response()->error('Halaman Tidak Ditemukan',404);
             }
         });
 
         $this->renderable(function (ModelNotFoundException $e, $request) {
             if ($request->is('api/*')) {
-               return response()->error(['failed'=>['Data Tidak Ditemukan']],404);
+               return response()->error('Data Tidak Ditemukan',404);
             }
         });
         $this->reportable(function (Throwable $e) {

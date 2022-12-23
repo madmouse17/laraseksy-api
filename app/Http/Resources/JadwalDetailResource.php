@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\AdminResource;
+use App\Http\Resources\MapelResource;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TahunAjaranResource extends JsonResource
+class JadwalDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +19,10 @@ class TahunAjaranResource extends JsonResource
     {
         return [
             'id'=>Crypt::encryptString($this->id),
-            'tahun'=>$this->tahun
+            'mulai'=> $this->mulai,
+            'selesai'=> $this->selesai,
+            'guru'=> $this->whenLoaded('admin', fn () => new AdminResource($this->admin)),
+            'mapel'=> $this->whenLoaded('mapel', fn () => new MapelResource($this->mapel)),
         ];
-
     }
 }

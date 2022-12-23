@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Kelas;
 use App\Models\Semester;
 use App\Models\tahunajaran;
+use App\Models\JadwalDetail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,6 +27,14 @@ class Jadwal extends Model
 
     public function semester(){
         return $this->belongsTo(Semester::class);
+    }
+
+    public function jadwaldetail(){
+        return $this->hasMany(JadwalDetail::class,'jadwal_id','id');
+    }
+
+    public function day(){
+        return $this->hasOne(Day::class,'id','day_id');
     }
 
 }

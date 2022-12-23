@@ -25,6 +25,10 @@ class Admin extends Authenticatable
         return $this->hasMany(WaliKelas::class);
     }
 
+    public function jadwaldetail(){
+        return $this->belongsTo(JadwalDetail::class);
+    }
+
     public static function question1()
     {
         return ['Film apa yang anda lihat pertama kali?', 'Siapa nama panggilan anda?', 'Siapa nama guru favorite anda waktu sma?', 'Di mana Anda bertemu pasangan Anda?', 'Di kota mana ibu anda lahir?'];

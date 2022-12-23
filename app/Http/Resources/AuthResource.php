@@ -19,7 +19,6 @@ class AuthResource extends JsonResource
         return [
             'id'=>Crypt::encryptString($this->id),
             'nama'=>$this->nama,
-            'kelas_id'=>Crypt::encryptString($this->kelas_id),
             'kelas'=> $this->whenLoaded('kelas', fn () => new KelasResource($this->kelas))
         ];
     }
