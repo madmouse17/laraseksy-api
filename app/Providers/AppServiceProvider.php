@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**
@@ -23,6 +24,27 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Response::macro('success', function ($data) {
+            return Response::json([
+                'type'  => 'success',
+                'title'  => 'Sukses',
+                'data' => $data,
+            ]);
+        });
+
+        Response::macro('successNoData', function ($message) {
+            return Response::json([
+                'type'  => 'success',
+                'title'  => 'Berhasil',
+                'message' => $message,
+            ]);
+        });
+
+        Response::macro('error', function ($message, $status = 422) {
+            return Response::json([
+                'message'  => 'error',
+                'errors' =>['failed' => [$message]],
+            ], $status);
+        });
     }
 }

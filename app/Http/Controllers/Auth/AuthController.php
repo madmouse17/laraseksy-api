@@ -25,81 +25,77 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        dd($request);
-
-        if (!$request->validated()) {
-            $respon = [
-                'type' => 'error',
-                'title' => 'Peringatan!',
-                'msg' => $request->errors(),
-            ];
-            return response()->json($respon, 401);
-        } else {
-            $credentials = $this->authRepo->credentials($request->validated());
+        try {
+             $credentials=$this->authRepo->credentials($request->validated());
             if ($credentials) {
+
                 return $credentials;
             }
             $data = $this->authRepo->Authorize($request->validated());
             return $data;
+        } catch (\Exception $e ) {
+            // dd($e);
+            return response()->error( $e);
         }
     }
     public function uploadImage(Request $request)
     {
-        // dd($request);
-        $path = storage_path('app/public/' . $request->dirpath);
+        try {
+            $path = storage_path('app/public/' . $request->dirpath);
 
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
 
-        if ($request->hasfile('image')) {
-            $file = $request->file('image');
+            if ($request->hasfile('image')) {
+                $file = $request->file('image');
 
-            $fileName = $file->getClientOriginalName();
+                $fileName = $file->getClientOriginalName();
 
-            $file->move($path, $fileName);
-            $data = [
-                'type' => 'success',
-                'msg' => 'Upload Siswa Sukses',
-                'title' => 'Berhasil',
-            ];
+                $file->move($path, $fileName);
 
-            return response()->json($data, 200);
+                return response()->successNoData('Upload Siswa Sukses');
+            }
+        } catch (\Exception $e) {
+            return response()->error( $e);
         }
     }
 
     public function downloadImage(Request $request)
     {
-        $user = $request->user();
-        $file = storage_path() . "/app/public/siswa/" . $user->image;
+        try {
+            $user = $request->user();
+            $file = storage_path() . "/app/public/siswa/" . $user->image;
 
-        $headers = array('Content-Type: image/png');
+            $headers = array('Content-Type: image/png');
 
-        return response()->download($file, 'siswa' . $user->nis . '-' . $user->nama . '_' . uniqid() . '.png', $headers);
+            return response()->download($file, 'siswa' . $user->nis . '-' . $user->nama . '_' . uniqid() . '.png', $headers);
+        } catch (\Exception $e) {
+            return response()->error( $e);
+        }
     }
 
     public function logout(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        $user->currentAccessToken()->delete();
-        $respon = [
-            'type' => 'success',
-            'msg' => 'Keluar dari Aplikasi',
-            'title' => 'Berhasil'
-        ];
-        return response()->json($respon, 200);
+            $user->currentAccessToken()->delete();
+
+            return response()->successNoData('Keluar dari Aplikasi');
+        } catch (\Exception $e) {
+            return response()->error( $e);
+        }
     }
 
     public function logoutall(Request $request)
     {
-        $user = $request->user();
-        $user->tokens()->delete();
-        $respon = [
-            'msg' => 'Keluar dari Aplikasi',
-            'type' => 'success',
-            'title' => 'Berhasil'
-        ];
-        return response()->json($respon, 200);
+        try {
+            $user = $request->user();
+            $user->tokens()->delete();
+            return response()->successNoData('Keluar dari Aplikasi');
+        } catch (\Exception $e) {
+            return response()->error( $e);
+        }
     }
 }
