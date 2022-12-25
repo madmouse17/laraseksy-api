@@ -7,6 +7,8 @@ use App\Repositories\AuthRepo\AuthInterface;
 use App\Repositories\AuthRepo\AuthRepository;
 use App\Repositories\JadwalRepo\JadwalInterface;
 use App\Repositories\JadwalRepo\JadwalRepository;
+use App\Repositories\PengumumanRepo\PengumumanInterface;
+use App\Repositories\PengumumanRepo\PengumumanRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -17,9 +19,9 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(AuthInterface::class,AuthRepository::class);
-        $this->app->bind(JadwalInterface::class,JadwalRepository::class);
-
+        $this->app->bind(AuthInterface::class, AuthRepository::class);
+        $this->app->bind(JadwalInterface::class, JadwalRepository::class);
+        $this->app->bind(PengumumanInterface::class, PengumumanRepository::class);
     }
 
     /**

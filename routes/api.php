@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\PengumumanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function() {
     Route::post('uploadimage', [AuthController::class, 'uploadImage']);
     Route::post('logoutall', [AuthController::class, 'logoutall']);
     Route::post('jadwal', [JadwalController::class, 'index']);
+    Route::get('pengumuman', [PengumumanController::class,'index']);
+
     // Route::post('absen', [JadwalController::class, 'absen']);
 });
 
