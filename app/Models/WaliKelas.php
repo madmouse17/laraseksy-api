@@ -24,4 +24,9 @@ class WaliKelas extends Model
         return $this->belongsTo(tahunajaran::class,'tahunajaran_id','id');
     }
 
+     public static function getWaliKelas($tahunajaran_id,$kelas_id)
+    {
+       return self::where('tahunajaran_id',$tahunajaran_id)->where('kelas_id',$kelas_id)->first();
+    }
+
 }

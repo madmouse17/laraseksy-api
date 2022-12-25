@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helper\helper;
 use App\Models\Jadwal;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,11 +11,13 @@ class JadwalDetail extends Model
 {
     use HasFactory;
 
-    protected $guarded=[];
+    protected $fillable=['id'];
     public function mapel()
     {
+
         return $this->hasOne(Mapel::class, 'id', 'mapel_id');
     }
+
 
     public function jadwal()
     {

@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Helper\helper;
 use App\Http\Resources\DayResource;
 use App\Http\Resources\JadwalDetailResource;
+use App\Models\WaliKelas;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JadwalResource extends JsonResource
@@ -16,10 +18,13 @@ class JadwalResource extends JsonResource
      */
     public function toArray($request)
     {
-        // dd($this);
+        $wali =WaliKelas::getWaliKelas($this->tahunajaran_id,$this->kelas_id);
         return [
             'day'=>$this->whenLoaded('day', fn () => new DayResource($this->day)),
             'jadwaldetail'=>JadwalDetailResource::collection($this->whenLoaded('jadwaldetail')),
+
+            'istirahat'=>helper::setIstirahat($this->jadwaldetail),
+            'wali_kelas'=>new AdminResource($wali->admin)
         ];
     }
 }
