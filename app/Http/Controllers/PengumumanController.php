@@ -22,8 +22,6 @@ class PengumumanController extends Controller
      */
     public function index()
     {
-
-
         try {
             return $this->pengumumanInterface->all();
         } catch (\Exception $e) {
