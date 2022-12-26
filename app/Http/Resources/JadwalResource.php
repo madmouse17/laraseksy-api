@@ -21,9 +21,8 @@ class JadwalResource extends JsonResource
         $wali =WaliKelas::getWaliKelas($this->tahunajaran_id,$this->kelas_id);
         return [
             'day'=>$this->whenLoaded('day', fn () => new DayResource($this->day)),
-            'jadwaldetail'=>JadwalDetailResource::collection($this->whenLoaded('jadwaldetail')),
-
-            'istirahat'=>helper::setIstirahat($this->jadwaldetail),
+            'jadwaldetail'=>collect(JadwalDetailResource::collection($this->whenLoaded('jadwaldetail')))->merge(collect(helper::setIstirahat($this->jadwaldetail)))->sortBy('mulai')->toArray(),
+            // 'istirahat'=>helper::setIstirahat($this->jadwaldetail),
             'wali_kelas'=>new AdminResource($wali->admin)
         ];
     }

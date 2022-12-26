@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Resources\JadwalDetailResource;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         Response::macro('success', function ($data) {
             return Response::json([
                 'type'  => 'success',
