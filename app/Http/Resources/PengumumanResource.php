@@ -18,10 +18,9 @@ class PengumumanResource extends JsonResource
     {
         return [
             'id'=>Crypt::encryptString($this->id),
-            'title'=>$this->title,
-            'image'=>$this->image,
-            'description'=>$this->description,
-            'url'=>env('PENGUMUMAN_URL').'/storage/pengumuman/'
+            'title'=>$this->whenNotNull($this->title),
+            'image'=>env('PENGUMUMAN_URL').'/storage/pengumuman/'.$this->image,
+            'description'=>$this->whenNotNull($this->description),
         ];
     }
 }

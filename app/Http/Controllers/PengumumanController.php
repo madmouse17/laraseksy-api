@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Repositories\PengumumanRepo\PengumumanInterface;
+use App\Models\Pengumuman;
 use Illuminate\Support\Env;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use App\Repositories\PengumumanRepo\PengumumanInterface;
 
 class PengumumanController extends Controller
 {
@@ -58,7 +60,14 @@ class PengumumanController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $decrypted = Crypt::decryptString($id);
+
+            $pengumuman = Pengumuman::find($decrypted);
+            return $this->pengumumanInterface->detail($pengumuman);
+        } catch (\Exception $e) {
+            return response()->error($e);
+        }
     }
 
     /**
