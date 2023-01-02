@@ -16,12 +16,8 @@ class Authenticate extends Middleware
     {
 
         if (! $request->expectsJson()) {
-            $data=[
-                    'type' => 'error',
-                    'msg' => 'Token Tidak Cocok',
-                    'title'=>'Unauthorized',
-            ];
-            return abort(response()->json($data, 401));
+
+            return abort(response()->error('Token Tidak Cocok',401));
         }
     }
 }
